@@ -8,6 +8,9 @@ public:
             }else if(nums[i]<nums[i-1]){
                 decreasing=true;
             }
+            if(decreasing&&increasing){
+                return false;
+            }
         }
         return !(decreasing&&increasing);
     }
