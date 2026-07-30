@@ -1,24 +1,30 @@
 class Solution {
-public:
-    int res;
-    void solve(int curr, int idx, string s) {
-        if(curr<=0 || curr>26){
-            return;
-        }
-        if (idx == s.size()) {
-            if (curr > 0 && curr <= 26) {
-                res++;
+    vector<int> memo;
+
+    int solve(int i, const string& s) {
+        if (i == s.size())
+            return 1;
+        if (s[i] == '0')
+            return 0;
+        if (memo[i] != -1)
+            return memo[i];
+
+        int ways = solve(i + 1, s);
+
+        if (i + 1 < s.size()) {
+            int value = (s[i] - '0') * 10 + (s[i + 1] - '0');
+
+            if (value >= 10 && value <= 26) {
+                ways += solve(i + 2, s);
             }
-            return;
         }
-        int take = INT_MIN;
-        int value = curr * 10 + (s[idx] - '0');
-        solve(value, idx + 1, s);
-        solve(s[idx] - '0', idx + 1, s);
+
+        return memo[i] = ways;
     }
+
+public:
     int numDecodings(string s) {
-        this->res = 0;
-        solve(s[0]-'0', 1, s);
-        return res;
+        memo.assign(s.size(), -1);
+        return solve(0, s);
     }
 };
